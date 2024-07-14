@@ -1,21 +1,30 @@
 # Data_Wrangling_Analysis_and_AB_Testing_with_SQL-AB_Testing
+
+
 -- AB Testing Final Assignment
+
+
 -- We are running an experiment at an item-level, which means all users who visit 
+
+
 -- will see the same page, but the layout of different item pages may differ.
 
 -- Compare this table to the assignment events we captured for user_level_testing.
 -- Does this table have everything you need to compute metrics like 30-day view-binary?
 -- Answer is No. The created_at date is needed.
 
-SELECT * 
-FROM dsv1069.final_assignments_qa;
+
+
+
+   SELECT * 
+   FROM dsv1069.final_assignments_qa;
 
 -- Write a query and table creation statement to make final_assignments_qa 
 -- look like the final_assignments table. If you discovered something missing 
 -- in part 1, you may fill in the value with a place holder of the appropriate 
 -- data type.
 
-SELECT item_id,
+  SELECT item_id,
        test_a AS test_assignment,
        (CASE
             WHEN test_a IS NOT NULL then 'test_a'
