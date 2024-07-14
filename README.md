@@ -28,7 +28,7 @@
 -- data type.
 
 
-  SELECT item_id,
+    SELECT item_id,
        test_a AS test_assignment,
        (CASE
             WHEN test_a IS NOT NULL then 'test_a'
@@ -38,9 +38,9 @@
             WHEN test_a IS NOT NULL then '2013-01-05 00:00:00'
             ELSE NULL
         END) AS test_start_date
-FROM dsv1069.final_assignments_qa
-UNION
-SELECT item_id,
+    FROM dsv1069.final_assignments_qa
+    UNION
+    SELECT item_id,
        test_b AS test_assignment,
        (CASE
             WHEN test_b IS NOT NULL then 'test_b'
@@ -49,10 +49,10 @@ SELECT item_id,
        (CASE
             WHEN test_b IS NOT NULL then '2013-01-05 00:00:00'
             ELSE NULL
-        END) AS test_start_date
-FROM dsv1069.final_assignments_qa
-UNION
-SELECT item_id,
+        END) AS test_start_date   
+    FROM dsv1069.final_assignments_qa
+    UNION
+    SELECT item_id,
        test_c AS test_assignment,
        (CASE
             WHEN test_c IS NOT NULL then 'test_c'
@@ -62,9 +62,9 @@ SELECT item_id,
             WHEN test_c IS NOT NULL then '2013-01-05 00:00:00'
             ELSE NULL
         END) AS test_start_date
-FROM dsv1069.final_assignments_qa
-UNION
-SELECT item_id,
+    FROM dsv1069.final_assignments_qa 
+    UNION
+    SELECT item_id,
        test_d AS test_assignment,
        (CASE
             WHEN test_d IS NOT NULL then 'test_d'
@@ -74,9 +74,9 @@ SELECT item_id,
             WHEN test_d IS NOT NULL then '2013-01-05 00:00:00'
             ELSE NULL
         END) AS test_start_date
-FROM dsv1069.final_assignments_qa
-UNION
-SELECT item_id,
+    FROM dsv1069.final_assignments_qa
+     UNION
+    SELECT item_id,
        test_e AS test_assignment,
        (CASE
             WHEN test_e IS NOT NULL then 'test_e'
@@ -86,9 +86,9 @@ SELECT item_id,
             WHEN test_e IS NOT NULL then '2013-01-05 00:00:00'
             ELSE NULL
         END) AS test_start_date
-FROM dsv1069.final_assignments_qa
-UNION
-SELECT item_id,
+    FROM dsv1069.final_assignments_qa
+    UNION
+    SELECT item_id,
        test_f AS test_assignment,
        (CASE
             WHEN test_f IS NOT NULL then 'test_f'
@@ -98,7 +98,7 @@ SELECT item_id,
             WHEN test_f IS NOT NULL then '2013-01-05 00:00:00'
             ELSE NULL
         END) AS test_start_date
-FROM dsv1069.final_assignments_qa;
+    FROM dsv1069.final_assignments_qa;
 
 
 
@@ -108,11 +108,11 @@ FROM dsv1069.final_assignments_qa;
 
 -- the day the test started)
 
-SELECT test_assignment,
+    SELECT test_assignment,
        COUNT(DISTINCT item_id) AS number_of_items,
        SUM(order_binary) AS items_ordered_30d
-FROM
-  (SELECT item_test_2.item_id,
+    FROM
+      (SELECT item_test_2.item_id,
           item_test_2.test_assignment,
           item_test_2.test_number,
           item_test_2.test_start_date,
@@ -122,19 +122,19 @@ FROM
                         AND DATE_PART('day', created_at - test_start_date) <= 30) THEN 1
                   ELSE 0
               END) AS order_binary
-   FROM
+       FROM
      (SELECT final_assignments.*,
              DATE(orders.created_at) AS created_at
       FROM dsv1069.final_assignments AS final_assignments
       LEFT JOIN dsv1069.orders AS orders
         ON final_assignments.item_id = orders.item_id
         WHERE test_number = 'item_test_2') AS item_test_2
-   GROUP BY item_test_2.item_id,
+       GROUP BY item_test_2.item_id,
             item_test_2.test_assignment,
             item_test_2.test_number,
             item_test_2.test_start_date,
             item_test_2.created_at) AS order_binary
-GROUP BY test_assignment;
+    GROUP BY test_assignment;
 
 -- Use the final_assignments table to calculate the view binary, and
 
@@ -142,7 +142,7 @@ GROUP BY test_assignment;
 
 -- item_test_2. (You may include the day the test started)
 
-SELECT item_test_2.item_id,
+    SELECT item_test_2.item_id,
        item_test_2.test_assignment,
        item_test_2.test_number,
        MAX(CASE
@@ -150,11 +150,11 @@ SELECT item_test_2.item_id,
                      AND DATE_PART('day', view_date - test_start_date) <= 30) THEN 1
                ELSE 0
            END) AS view_binary
-FROM
-  (SELECT final_assignments.*,
-          DATE(events.event_time) AS view_date
-   FROM dsv1069.final_assignments AS final_assignments
-   LEFT JOIN
+    FROM
+      (SELECT final_assignments.*,
+              DATE(events.event_time) AS view_date
+          FROM dsv1069.final_assignments AS final_assignments
+       LEFT JOIN
        (SELECT event_time,
                CASE
                    WHEN parameter_name = 'item_id' THEN CAST(parameter_value AS NUMERIC)
@@ -163,11 +163,11 @@ FROM
       FROM dsv1069.events
       WHERE event_name = 'view_item') AS events
      ON final_assignments.item_id = events.item_id
-   WHERE test_number = 'item_test_2') AS item_test_2
-GROUP BY item_test_2.item_id,
+       WHERE test_number = 'item_test_2') AS item_test_2
+    GROUP BY item_test_2.item_id,
          item_test_2.test_assignment,
          item_test_2.test_number
-LIMIT 100;
+    LIMIT 100;
 
 
 -- Use the https://thumbtack.github.io/abba/demo/abba.html
@@ -178,12 +178,12 @@ LIMIT 100;
 
 -- interval 95% confidence.
 
-SELECT test_assignment,
+    SELECT test_assignment,
        test_number,
        COUNT(DISTINCT item) AS number_of_items,
        SUM(view_binary_30d) AS view_binary_30d
-FROM
-  (SELECT final_assignments.item_id AS item,
+    FROM
+      (SELECT final_assignments.item_id AS item,
           test_assignment,
           test_number,
           test_start_date,
@@ -191,15 +191,15 @@ FROM
                    WHEN date(event_time) - date(test_start_date) BETWEEN 0 AND 30 THEN 1
                    ELSE 0
                END)) AS view_binary_30d
-   FROM dsv1069.final_assignments
-   LEFT JOIN dsv1069.view_item_events
+       FROM dsv1069.final_assignments
+       LEFT JOIN dsv1069.view_item_events
      ON final_assignments.item_id = view_item_events.item_id
-   WHERE test_number = 'item_test_2'
-   GROUP BY final_assignments.item_id,
+       WHERE test_number = 'item_test_2'
+       GROUP BY final_assignments.item_id,
             test_assignment,
             test_number,
             test_start_date) AS view_binary
-GROUP BY test_assignment,
+    GROUP BY test_assignment,
          test_number,
          test_start_date;
          
