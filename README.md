@@ -20,9 +20,13 @@
    FROM dsv1069.final_assignments_qa;
 
 -- Write a query and table creation statement to make final_assignments_qa 
+
 -- look like the final_assignments table. If you discovered something missing 
+
 -- in part 1, you may fill in the value with a place holder of the appropriate 
+
 -- data type.
+
 
   SELECT item_id,
        test_a AS test_assignment,
@@ -96,8 +100,12 @@ SELECT item_id,
         END) AS test_start_date
 FROM dsv1069.final_assignments_qa;
 
+
+
 -- Use the final_assignments table to calculate the order binary for the
+
 -- 30 day window after the test assignment for item_test_2 (You may include
+
 -- the day the test started)
 
 SELECT test_assignment,
@@ -129,7 +137,9 @@ FROM
 GROUP BY test_assignment;
 
 -- Use the final_assignments table to calculate the view binary, and
+
 -- average views for the 30 day window after the test assignment for
+
 -- item_test_2. (You may include the day the test started)
 
 SELECT item_test_2.item_id,
@@ -159,9 +169,13 @@ GROUP BY item_test_2.item_id,
          item_test_2.test_number
 LIMIT 100;
 
+
 -- Use the https://thumbtack.github.io/abba/demo/abba.html
+
 -- to compute the lifts in metrics and the p-values for the binary
+
 -- metrics (30 day order binary and 30 day view binary) using a
+
 -- interval 95% confidence.
 
 SELECT test_assignment,
